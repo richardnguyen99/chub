@@ -50,18 +50,17 @@ int insert(trie *node, const char *key)
         }
 
         if (curr->_children[index] == TRIE_FAIL)
+        {
+            curr->_children[index] = NULL;
             return TRIE_INTC;
-
-        if (curr->_end == 1)
-            return 0;
+        }
 
         curr = curr->_children[index];
         ++key;
     }
 
     curr->_end = 1;
-
-    return 1;
+    return 0;
 }
 
 int search(trie *node, const char *key)

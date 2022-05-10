@@ -1,4 +1,8 @@
 {
     "makefile.extensionOutputFolder": "./.vscode",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "files.associations": {
+        "mman.h": "c",
+        "stddef.h": "c"
+    }
 }

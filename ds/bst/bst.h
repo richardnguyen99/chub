@@ -18,35 +18,9 @@ struct __tree
 
 typedef struct __tree bstree;
 
-/**
- * @brief Insert a new value _X into tree _NODE.
- *
- * @return error code. An error code EDUPS indicates there is an error like _NODE
- * already has _X. Otherwise, 1 is returned.
- */
 int insert(struct __tree **_node, int _x);
-
-/**
- * @brief Check if _NODE contains _X
- *
- * @return Returning ENULT indicates a null tree. 0 means there is no _X
- * in _NODE. Otherwise, 1 is returned
- */
 int contain(struct __tree **_node, int _x);
-
-/**
- * @brief Count how many nodes is in _NODE
- *
- * @return Returning ENULT indicates a null tree.
- */
 int count(struct __tree **_node);
-
-/**
- * @brief Delete value _X from tree _NODE
- *
- * @param node
- * @param _x
- */
 int delete (struct __tree **node, int _x);
 int deallocate(struct __tree **_node);
 int height(struct __tree **_node);

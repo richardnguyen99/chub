@@ -3,6 +3,7 @@
     "editor.formatOnSave": true,
     "files.associations": {
         "mman.h": "c",
-        "stddef.h": "c"
+        "stddef.h": "c",
+        "scheduler.h": "c"
     }
 }

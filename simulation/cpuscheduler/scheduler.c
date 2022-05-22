@@ -2,8 +2,9 @@
 #include <errno.h>  // errno, strerror
 
 #include "scheduler.h"
+#include "fcfs.h"
 
-int getalgo(const char *key)
+int get_scheduler(const char *key)
 {
     static scheduler_t lookup[] =
         {
@@ -52,12 +53,26 @@ CPU-scheduling simulator.\n\
     ");
 }
 
+int simulate(int policy, FILE *ready_queue, int mode)
+{
+    if ((mode & SCHED_OUT) == 0x0)
+    {
+        fprintf(stderr, "simulate() requires to have SCHED_OUT to display\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if (policy == FCFS)
+        return fcfs(ready_queue, mode);
+
+    return -1;
+}
+
 int main(int argc, char **argv)
 {
     static const char *filename = "-";
 
-    int algo;
-    int full = 0;
+    int algo = -1;
+    // int full = 0;
     int waiting = 0;
     int response = 0;
 
@@ -76,7 +91,7 @@ int main(int argc, char **argv)
         switch (c)
         {
         case 'p':
-            algo = getalgo(optarg);
+            algo = get_scheduler(optarg);
 
             if (algo == -1)
             {
@@ -87,7 +102,7 @@ int main(int argc, char **argv)
 
             break;
         case 'f':
-            full = 1;
+            // full = 1;
             waiting = 1;
             response = 1;
             break;
@@ -104,26 +119,44 @@ int main(int argc, char **argv)
     }
 
     int argind = optind;
-    do
+
+    if (argind < argc - 1)
     {
-        if (argind < argc)
-            filename = argv[argind];
+        fprintf(stderr, "Scheduler only accepts one file. Too many file after \"%s\"\n", argv[argind]);
+        exit(EXIT_FAILURE);
+    }
 
-        if (strcmp(filename, "-") == 0)
-        {
-            fprintf(stderr, "scheduler: Test file is missing\n");
-            exit(EXIT_FAILURE);
-        }
+    if (algo == -1)
+    {
+        fprintf(stderr, "Scheduler requires a scheduling policy. See option '-p'\n");
+        exit(EXIT_FAILURE);
+    }
 
-        FILE *file;
-        int chr;
+    if (argind < argc)
+        filename = argv[argind];
 
-        if ((file = fopen(argv[argind], "r")) == NULL)
-        {
-            fprintf(stderr, "scheduler: unable to open file %s\n", argv[argind]);
-            exit(EXIT_FAILURE);
-        }
-    } while (++argind < argc);
+    if (strcmp(filename, "-") == 0)
+    {
+        fprintf(stderr, "scheduler: Test file is missing\n");
+        exit(EXIT_FAILURE);
+    }
+
+    FILE *file;
+
+    if ((file = fopen(argv[argind], "r")) == NULL)
+    {
+        fprintf(stderr, "scheduler: unable to open file %s\n", argv[argind]);
+        exit(EXIT_FAILURE);
+    }
+
+    int mode = SCHED_OUT;
+
+    if (waiting)
+        mode |= SCHED_WAIT;
+    if (response)
+        mode |= SCHED_RESP;
+
+    simulate(algo, file, mode);
 
     return 0;
 }

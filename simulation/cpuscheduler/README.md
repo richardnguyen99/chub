@@ -10,11 +10,11 @@
 
 ## Introduction
 
-This project introduces some common CPU-scheduling algorithms and some simulations to demonstrate how they work
+This project introduces some common CPU-scheduling algorithms and some simulations to demonstrate how they work.
 
 ### Design
 
-Driver `scheduler.c` contains the main program to execute the scheduling simulation. The driver takes at least two arguments, _file_ that contains a list of process, including essential information, and one selected _CPU-scheduling algorithm_.
+`scheduler.c` contains the main program to execute the scheduling simulation. The driver takes at least two arguments, _file_ that contains a list of process, including essential information, and one selected _CPU-scheduling algorithm_ (See `scheduler -p` for more details). Then, the associated scheduling algorithm is used and
 
 The driver also provides some other options to interact with the algorithms if applicable. The function employs `getopt.h` to
 
